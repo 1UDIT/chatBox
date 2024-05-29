@@ -21,6 +21,8 @@ export default function page({ params }: { params: { Username: string } }) {
     const CopyUrl = typeof window !== "undefined" ? (`${window.location.origin}/${params.Username}`) : '';
     const { toast } = useToast()
     const passwordRef = useRef(null)
+    // const { data: session } = useSession();
+    // const user : User = session?.user;
 
     const toggle = () => {
         switch (AcptMsg) {
@@ -65,6 +67,9 @@ export default function page({ params }: { params: { Username: string } }) {
                 <span className="text-xl"><Switch checked={AcptMsg} onCheckedChange={() => setAcptMsg((value) => !value)} /><Label className="pl-2">Accept Msg {`${toggle()}`}</Label></span>
 
                 <Card className="mx-7 my-7">
+                    <CardHeader>
+                        <CardTitle>Message</CardTitle> 
+                    </CardHeader>
                     <div className="grid grid-cols-1 md:grid-cols-2   z-[1]  dark:text-white">
 
                     </div>
