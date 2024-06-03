@@ -15,10 +15,11 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import { signInSchema } from "@/Schema/SigninSchema" 
+import { signInSchema } from "@/Schema/SigninSchema"
 import { useToast } from "@/components/ui/use-toast"
 import { signIn } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
+import { AiFillGoogleCircle } from "react-icons/ai";
 
 export default function page() {
     const router = useRouter();
@@ -55,7 +56,7 @@ export default function page() {
         }
 
         if (result?.url) {
-            router.replace( `/dashBorad/${data.identifier}`);
+            router.replace(`/dashBorad/${data.identifier}`);
         }
     }
 
@@ -95,6 +96,8 @@ export default function page() {
                         <Button className='w-full' type="submit">Sign In</Button>
                     </form>
                 </Form>
+                <h6>Sign-In using other method</h6>
+                <div className="text-center flex justify-center "> <AiFillGoogleCircle className="h-10 w-10 text-[#0f172a]"/></div>
                 <div className="text-center mt-4">
                     <p>
                         Not a member yet?{' '}
