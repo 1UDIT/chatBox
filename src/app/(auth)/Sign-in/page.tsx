@@ -96,8 +96,8 @@ export default function page() {
                         <Button className='w-full' type="submit">Sign In</Button>
                     </form>
                 </Form>
-                <h6>Sign-In using other method</h6>
-                <div className="text-center flex justify-center "> <AiFillGoogleCircle className="h-10 w-10 text-[#0f172a]"/></div>
+                {/* <h6>Sign-In using other method</h6>
+                <div className="text-center flex justify-center "> <Button variant={'ghost'}><AiFillGoogleCircle className="h-10 w-10 text-[#0f172a]"/></Button></div> */}
                 <div className="text-center mt-4">
                     <p>
                         Not a member yet?{' '}
