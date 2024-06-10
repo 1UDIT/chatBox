@@ -33,8 +33,8 @@ const initialMessageString =
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
-export default function page({ params }: { params: { Username: string } }) {
-    const username = params.Username;
+export default function page({ params }: { params: { userName: string } }) {
+    const username = params.userName;
     const [isLoading, setIsLoading] = useState(false); 
 
     console.log(username,"userName",params);
