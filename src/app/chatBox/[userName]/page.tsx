@@ -17,9 +17,8 @@ import { z } from 'zod'
 import { messageSchema } from '@/Schema/messageSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, Loader2 } from 'lucide-react'
-import { Button } from '@/components/ui/button';
-import { getAnswer } from '@/app/chat/action';
-import { useChat, useCompletion } from 'ai/react';
+import { Button } from '@/components/ui/button'; 
+import {  useCompletion } from 'ai/react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 const specialChar = '||';
@@ -36,8 +35,7 @@ export const maxDuration = 30;
 
 export default function page({ params }: { params: { Username: string } }) {
     const username = params.Username;
-    const [isLoading, setIsLoading] = useState(false);
-    const [generation, setGeneration] = useState<string>('');
+    const [isLoading, setIsLoading] = useState(false); 
 
     const {
         complete,

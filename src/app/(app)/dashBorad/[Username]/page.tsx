@@ -6,10 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
+    Card, 
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -28,9 +25,7 @@ export default function page({ params }: { params: { Username: string } }) {
     const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast()
-    const passwordRef = useRef(null)
-    // const { data: session } = useSession();
-    // const user : User = session?.user;
+    const passwordRef = useRef(null) 
 
     const form = useForm({
         resolver: zodResolver(AcceptMessageSchema),
@@ -38,8 +33,7 @@ export default function page({ params }: { params: { Username: string } }) {
 
     const { register, watch, setValue } = form
 
-    const acceptMessages = watch('acceptValue');
-    console.log(acceptMessages, 'acceptValue')
+    const acceptMessages = watch('acceptValue'); 
 
     const toggle = () => {
         switch (AcptMsg) {

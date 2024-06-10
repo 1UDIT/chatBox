@@ -18,8 +18,7 @@ import Link from "next/link"
 import { signInSchema } from "@/Schema/SigninSchema"
 import { useToast } from "@/components/ui/use-toast"
 import { signIn } from "next-auth/react"
-import { useRouter } from "next/navigation";
-import { AiFillGoogleCircle } from "react-icons/ai";
+import { useRouter } from "next/navigation"; 
 
 export default function page() {
     const router = useRouter();

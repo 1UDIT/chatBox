@@ -23,7 +23,7 @@ import { signUpSchema } from '@/Schema/SignupSchema';
 import { useDebounceCallback } from 'usehooks-ts'
 import { ApiResponse } from '@/types/ApiResponse';
 
-export default function SignUpForm() {
+export default function page() {
     const [username, setUsername] = useState('');
     const [usernameMessage, setUsernameMessage] = useState('');
     const [isCheckingUsername, setIsCheckingUsername] = useState(false);
