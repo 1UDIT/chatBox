@@ -37,7 +37,7 @@ export const maxDuration = 30;
 export default function page({ params }: { params: { Username: string } }) {
     const username = params.Username;
     const [isLoading, setIsLoading] = useState(false);
-    const { messages, input, handleInputChange, handleSubmit } = useChat();
+    const [generation, setGeneration] = useState<string>('');
 
     const {
         complete,
@@ -48,7 +48,6 @@ export default function page({ params }: { params: { Username: string } }) {
         api: '/api/suggestMessages',
         initialCompletion: initialMessageString,
     });
-
 
     const form = useForm<z.infer<typeof messageSchema>>({
         resolver: zodResolver(messageSchema)
@@ -62,7 +61,7 @@ export default function page({ params }: { params: { Username: string } }) {
 
     const fetchSuggestedMessages = async () => {
         try {
-            complete('hello');
+            complete('');
         } catch (error) {
             console.error('Error fetching messages:', error);
             // Handle error appropriately
@@ -112,7 +111,7 @@ export default function page({ params }: { params: { Username: string } }) {
                                     <FormControl>
                                         <Textarea
                                             placeholder="Type your message here."
-                                            className="resize-none"
+                                            className="resize-none "
                                             {...field}
                                         />
                                     </FormControl>
@@ -148,7 +147,7 @@ export default function page({ params }: { params: { Username: string } }) {
                     <CardHeader>
                         <h3 className="text-xl font-semibold">Messages</h3>
                     </CardHeader>
-                    <CardContent className="flex flex-col space-y-4">
+                    <CardContent className="flex flex-col space-y-4 ">
                         {error ? (
                             <p className="text-red-500">{error.message}</p>
                         ) : (
@@ -156,7 +155,7 @@ export default function page({ params }: { params: { Username: string } }) {
                                 <Button
                                     key={index}
                                     variant="outline"
-                                    className="mb-2"
+                                    className="mb-2 h-auto w-auto break-words text-wrap"
                                     onClick={() => handleMessageClick(message)}
                                 >
                                     {message}
@@ -169,9 +168,10 @@ export default function page({ params }: { params: { Username: string } }) {
 
             <div className="text-center">
                 <div className="mb-4">Get Your Message Board</div>
-                <Link href={'/sign-up'}>
-                    <Button>Create Your Account</Button>
-                </Link>
+                <Button>
+                    <Link href="/Sign-up">Create Your Account</Link>
+                </Button>
+
             </div>
         </>
     )

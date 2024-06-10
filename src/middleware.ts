@@ -3,7 +3,7 @@ import { getToken } from 'next-auth/jwt';
 export { default } from 'next-auth/middleware';
 
 export const config = {
-  matcher: ['/dashBorad/:path*', '/chatBox/:path*','/Sign-in', '/Sign-up', '/', '/verify/:path*'],
+  matcher: ['/dashBorad/:path*', '/Sign-in', '/Sign-up', '/', '/verify/:path*'],
 };
 
 export async function middleware(request: NextRequest) {
@@ -22,7 +22,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(`/dashBorad/${token.username}`, request.url));
   }
 
-  if (!token && url.pathname.startsWith('/dashBorad')|| !token && url.pathname.startsWith('/chatBox')) {
+  if (!token && url.pathname.startsWith('/dashBorad') || !token && url.pathname.startsWith('/chatBox')) {
+    return NextResponse.redirect(new URL('/Sign-in', request.url));
+  }
+  if (!token && url.pathname.startsWith('/dashBorad')) {
     return NextResponse.redirect(new URL('/Sign-in', request.url));
   }
 

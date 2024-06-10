@@ -50,9 +50,9 @@ export default function DisplayMesCard({ message, onMessageDelete }: MessageCard
         }
     };
     return (
-        <Card className="card-bordered">
+        <Card className="card-bordered break-words text-wrap">
             <CardHeader>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center ">
                     <CardTitle>{message.content}</CardTitle>
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
