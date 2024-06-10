@@ -37,6 +37,8 @@ export default function page({ params }: { params: { Username: string } }) {
     const username = params.Username;
     const [isLoading, setIsLoading] = useState(false); 
 
+    console.log(username,"userName");
+
     const {
         complete,
         completion,
