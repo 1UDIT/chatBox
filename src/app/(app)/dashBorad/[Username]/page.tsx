@@ -19,9 +19,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AcceptMessageSchema } from "@/Schema/AcceptMessageSchema";
 
-export default function page({ params }: { params: { Username: string } }) {
+export default function page({ params }: { params: { username: string } }) {
     const [AcptMsg, setAcptMsg] = useState<boolean>();
-    const CopyUrl = typeof window !== "undefined" ? (`${window.location.origin}/chatBox/${params.Username}`) : '';
+    const CopyUrl = typeof window !== "undefined" ? (`${window.location.origin}/chatBox/${params.username}`) : '';
     const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast()
