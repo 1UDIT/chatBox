@@ -7,15 +7,15 @@ import mongoose from "mongoose";
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ messageId: string }> }
+  { params }: { params: Promise<{ messageid: string }> }
 ) {
   await dbConnect();
 
   // ✅ MUST await params (Next 15)
-  const { messageId } = await params;
-  console.log("messageId:", messageId);
+  const { messageid } = await params;
+  console.log("messageid:", messageid);
 
-  if (!mongoose.Types.ObjectId.isValid(messageId)) {
+  if (!mongoose.Types.ObjectId.isValid(messageid)) {
     return NextResponse.json(
       { message: "Invalid message ID" },
       { status: 400 }
@@ -34,7 +34,7 @@ export async function DELETE(
 
   const result = await User.updateOne(
     { _id: dbUser._id },
-    { $pull: { messages: { _id: new mongoose.Types.ObjectId(messageId) } } }
+    { $pull: { messages: { _id: new mongoose.Types.ObjectId(messageid) } } }
   );
 
   if (result.modifiedCount === 0) {
