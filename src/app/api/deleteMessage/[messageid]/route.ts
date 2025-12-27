@@ -1,20 +1,26 @@
 import dbConnect from "@/lib/dbConfig/dbConfig";
 import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../../[auth]/[...nextauth]/route";
 import User from "@/Model/User";
 import mongoose from "mongoose";
 
 export async function DELETE(
-  request: Request,
-  context: { params: Promise<{ messageId: string }> }
+  request: NextRequest,
+  { params }: { params: Promise<{ messageId: string }> }
 ) {
   await dbConnect();
 
-  // 🔑 MUST await params
-  const { messageId } = await context.params;
+  // ✅ MUST await params (Next 15)
+  const { messageId } = await params;
+  console.log("messageId:", messageId);
 
-  console.log("messageid:", messageId,(await context.params));
+  if (!mongoose.Types.ObjectId.isValid(messageId)) {
+    return NextResponse.json(
+      { message: "Invalid message ID" },
+      { status: 400 }
+    );
+  }
 
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
@@ -26,11 +32,9 @@ export async function DELETE(
     return NextResponse.json({ message: "User not found" }, { status: 404 });
   }
 
-  const messageObjectId = new mongoose.Types.ObjectId(messageId);
-
   const result = await User.updateOne(
     { _id: dbUser._id },
-    { $pull: { messages: { _id: messageObjectId } } }
+    { $pull: { messages: { _id: new mongoose.Types.ObjectId(messageId) } } }
   );
 
   if (result.modifiedCount === 0) {

@@ -150,7 +150,7 @@ export default function page() {
                     <Label className="pl-2"> Accept Messages: {acceptMessages ? 'On' : 'Off'}</Label>
                 </span>
             </div>
-            <Card className='flex flex-wrap h-45 sm:h-64 lg:h-66 xl:h-88 flex-1 overflow-auto'>
+            <Card className='  h-45 sm:h-64 lg:h-66 xl:h-88 flex-1 overflow-auto'>
                 <CardHeader>
                     <CardTitle>Message</CardTitle>
                 </CardHeader>
