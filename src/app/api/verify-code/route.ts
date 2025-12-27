@@ -1,5 +1,5 @@
-import UserModel from "@/Model/User";
 import dbConnect from "@/lib/dbConfig/dbConfig";
+import UserModel from "@/Model/User";
 
 
 export async function POST(request: Request) {
@@ -11,6 +11,9 @@ export async function POST(request: Request) {
     const decodedUsername = decodeURIComponent(username);
     const user = await UserModel.findOne({ username: decodedUsername });
 
+    console.log(decodedUsername, "username")
+    
+
     if (!user) {
       return Response.json(
         { success: false, message: 'User not found' },
@@ -18,20 +21,31 @@ export async function POST(request: Request) {
       );
     }
 
+    console.log("DB values:", {
+      dbVerifyCode: user.verifyCode,
+      dbVerifyCodeExpiry: user.verifyCodeExpiry,
+      receivedCode: code,
+      now: new Date(),
+    });
+
+
     // Check if the code is correct and not expired
     const isCodeValid = user.verifyCode === code;
     const isCodeNotExpired = new Date(user.verifyCodeExpiry) > new Date();
 
     if (isCodeValid && isCodeNotExpired) {
-      // Update the user's verification status
       user.isVerified = true;
+      user.verifyCode = undefined;
+      user.verifyCodeExpiry = undefined;
+
       await user.save();
 
       return Response.json(
-        { success: true, message: 'Account verified successfully' },
+        { success: true, message: "Account verified successfully" },
         { status: 200 }
       );
-    } else if (!isCodeNotExpired) {
+    }
+    else if (!isCodeNotExpired) {
       // Code has expired
       return Response.json(
         {

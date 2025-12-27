@@ -15,13 +15,13 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/components/ui/use-toast';
 import axios, { AxiosError } from 'axios';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { signUpSchema } from '@/Schema/SignupSchema';
 import { useDebounceCallback } from 'usehooks-ts'
 import { ApiResponse } from '@/types/ApiResponse';
+import { toast } from 'sonner';
 
 export default function page() {
     const [username, setUsername] = useState('');
@@ -31,7 +31,6 @@ export default function page() {
     const debouncedUsername = useDebounceCallback(setUsername, 300);
 
     const router = useRouter();
-    const { toast } = useToast();
 
     const form = useForm<z.infer<typeof signUpSchema>>({
         resolver: zodResolver(signUpSchema),
@@ -70,10 +69,7 @@ export default function page() {
         try {
             const response = await axios.post<ApiResponse>('/api/sign-up', data);
 
-            toast({
-                title: 'Success',
-                description: response.data.message,
-            });
+            toast.info('Success',);
 
             router.replace(`/verify/${username}`);
 
@@ -87,11 +83,7 @@ export default function page() {
             let errorMessage = axiosError.response?.data.message;
             ('There was a problem with your sign-up. Please try again.');
 
-            toast({
-                title: 'Sign Up Failed',
-                description: errorMessage,
-                variant: 'destructive',
-            });
+            toast.error(`Sign Up Failed${errorMessage}`);
 
             setIsSubmitting(false);
         }
@@ -125,8 +117,8 @@ export default function page() {
                                     {!isCheckingUsername && usernameMessage && (
                                         <p
                                             className={`text-sm ${usernameMessage === 'Username is unique'
-                                                    ? 'text-green-500'
-                                                    : 'text-red-500'
+                                                ? 'text-green-500'
+                                                : 'text-red-500'
                                                 }`}
                                         >
                                             {usernameMessage}
@@ -160,7 +152,7 @@ export default function page() {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit" className='w-full' disabled={isSubmitting}>
+                        <Button type="submit" className='w-full bg-blue-400 text-white hover:bg-blue-300 hover:text-black' disabled={isSubmitting}>
                             {isSubmitting ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -175,7 +167,7 @@ export default function page() {
                 <div className="text-center mt-4">
                     <p>
                         Already a member?{' '}
-                        <Link href="/sign-in" className="text-blue-600 hover:text-blue-800">
+                        <Link href="/Sign-in" className="text-blue-600 hover:text-blue-800">
                             Sign in
                         </Link>
                     </p>

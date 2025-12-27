@@ -1,31 +1,31 @@
 import { NextResponse } from "next/server";
-import UserModel, { Message } from "@/Model/User";
+import UserModel from "@/Model/User";
 import dbConnect from "@/lib/dbConfig/dbConfig";
 
 export async function POST(request: Request) {
-    // const session = await getServerSession(authOptions);
-    // const user: User = session?.user;
     await dbConnect();
     const { username, content } = await request.json();
+    console.log(username, "user", content)
 
     try {
-        const user = await UserModel.findOne({ username }).exec();
+        const user = await UserModel.findOne({ username: username });
+        console.log(user, "user", username)
         if (!user) {
             return NextResponse.json(
-                { success: false, message: "not login" },
+                { success: false, message: "User not found" },
                 { status: 404 }
-            )
+            );
         }
 
         if (!user.isAcceptingMessages) {
             return NextResponse.json(
-                { success: false, message: "User not AcceptingMessages" },
-                { status: 404 }
+                { success: false, message: "User not Accepting-Messages go admin pannel" },
+                { status: 403 }
             )
         }
 
         const newMessage = { content, createdAt: new Date() };
-        user.messages.push(newMessage as Message);
+        user?.messages.push(newMessage);
         await user.save();
 
         return NextResponse.json(

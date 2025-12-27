@@ -15,14 +15,14 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import { signInSchema } from "@/Schema/SigninSchema"
-import { useToast } from "@/components/ui/use-toast"
+import { signInSchema } from "@/Schema/SigninSchema" 
 import { signIn } from "next-auth/react"
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
+import { FcGoogle } from "react-icons/fc";
+import { toast } from "sonner"
 
 export default function page() {
-    const router = useRouter();
-    const { toast } = useToast();
+    const router = useRouter(); 
     const form = useForm<z.infer<typeof signInSchema>>({
         resolver: zodResolver(signInSchema),
         defaultValues: {
@@ -40,28 +40,20 @@ export default function page() {
 
         if (result?.error) {
             if (result.error === 'CredentialsSignin') {
-                toast({
-                    title: 'Login Failed',
-                    description: 'Incorrect username or password',
-                    variant: 'destructive',
-                });
+                toast(`Login Failed  Incorrect username or password`);
             } else {
-                toast({
-                    title: 'Error',
-                    description: result.error,
-                    variant: 'destructive',
-                });
+                toast(`Login Failed ${result.error}`);
             }
         }
 
         if (result?.url) {
-            router.replace(`/dashBorad/${data.identifier}`);
+            router.replace(`/chatBox/${data.identifier}`);
         }
     }
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-800">
-            <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+            <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
                 <div className="text-center">
                     <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
                         Welcome Back to True Feedback
@@ -76,7 +68,7 @@ export default function page() {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Email/Username</FormLabel>
-                                    <Input {...field} />
+                                    <Input {...field} placeholder="admin123" />
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -87,14 +79,27 @@ export default function page() {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Password</FormLabel>
-                                    <Input type="password" {...field} />
+                                    <Input type="password" {...field} placeholder="admin123" />
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-                        <Button className='w-full' type="submit">Sign In</Button>
+                        <Button className='w-full bg-blue-400 text-white hover:bg-blue-300 hover:text-black' type="submit">Sign In</Button>
                     </form>
                 </Form>
+                <div className="text-slate-600 flex justify-center py-2">Log in to your account</div>
+                <div className="text-slate-600 flex justify-center px-2">
+                    <Button onClick={() =>
+                        signIn("google", {
+                            callbackUrl: "/chatBox/feedback",
+                        })
+                        
+                    } className="bg-white text-white hover:bg-blue-300 hover:text-black shadow3xl">
+                        <div className="flex items-center h-auto flex-row h-14">
+                            <FcGoogle size={25} />
+                            <div className="text-[#5c6c75] px-2 text-md">Google</div>
+                        </div>
+                    </Button></div>
                 {/* <h6>Sign-In using other method</h6>
                 <div className="text-center flex justify-center "> <Button variant={'ghost'}><AiFillGoogleCircle className="h-10 w-10 text-[#0f172a]"/></Button></div> */}
                 <div className="text-center mt-4">
@@ -106,6 +111,6 @@ export default function page() {
                     </p>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }

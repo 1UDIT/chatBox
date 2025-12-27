@@ -10,22 +10,29 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { ApiResponse } from '@/types/ApiResponse'
-import { toast } from '@/components/ui/use-toast'
 import axios, { AxiosError } from 'axios'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { messageSchema } from '@/Schema/messageSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, Loader2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'; 
-import {  useCompletion } from 'ai/react';
+import { Button } from '@/components/ui/button';
+import { useCompletion } from '@ai-sdk/react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { useSession } from 'next-auth/react';
+import { Session } from "next-auth";
+import { toast } from 'sonner';
+
 
 const specialChar = '||';
 
 const parseStringMessages = (messageString: string): string[] => {
-    return messageString.split(specialChar);
+    return messageString
+        .split(specialChar)
+        .map(msg => msg.trim())
+        .filter(Boolean);
 };
+
 
 const initialMessageString =
     "What's your favorite movie?||Do you have any pets?||What's your dream job?";
@@ -33,11 +40,14 @@ const initialMessageString =
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
-export default function page({ params }: { params: { userName: string } }) {
-    const username = params.userName;
-    const [isLoading, setIsLoading] = useState(false); 
+export default function page() {
+    const { data: session } = useSession();
+    const user: Session["user"] = session?.user;
+    const username = user?.username || user?.email?.split("@")[0];
+    const [isLoading, setIsLoading] = useState(false);
 
-    console.log(username,"userName",params);
+
+
 
     const {
         complete,
@@ -47,7 +57,9 @@ export default function page({ params }: { params: { userName: string } }) {
     } = useCompletion({
         api: '/api/suggestMessages',
         initialCompletion: initialMessageString,
+        streamProtocol: "text"
     });
+
 
     const form = useForm<z.infer<typeof messageSchema>>({
         resolver: zodResolver(messageSchema)
@@ -61,7 +73,9 @@ export default function page({ params }: { params: { userName: string } }) {
 
     const fetchSuggestedMessages = async () => {
         try {
-            complete('');
+            complete(
+                "Generate casual conversation questions in ONE LINE separated by || only"
+            );
         } catch (error) {
             console.error('Error fetching messages:', error);
             // Handle error appropriately
@@ -70,38 +84,31 @@ export default function page({ params }: { params: { userName: string } }) {
 
     const onSubmit = async (data: z.infer<typeof messageSchema>) => {
         setIsLoading(true);
+        console.log(username, "userName")
         try {
             const response = await axios.post<ApiResponse>('/api/send-message', {
                 ...data,
                 username,
             });
 
-            toast({
-                title: response.data.message,
-                variant: 'default',
-            });
+            toast.info(response.data.message);
             form.reset({ ...form.getValues(), content: '' });
         } catch (error) {
             const axiosError = error as AxiosError<ApiResponse>;
-            toast({
-                title: 'Error',
-                description:
-                    axiosError.response?.data.message ?? 'Failed to sent message',
-                variant: 'destructive',
-            });
+            toast.error(`Error ${axiosError.response?.data.message ?? 'Failed to sent message'}`);
         } finally {
             setIsLoading(false);
         }
     };
 
     return (
-        <>
-            <div className="container mx-auto my-8 p-6 bg-white rounded max-w-4xl">
-                <h1 className="text-4xl font-bold mb-6 text-center">
+        <div className="container mx-auto my-8 px-6 bg-white rounded max-w-4xl">
+            <div className='flex flex-wrap flex-col'>
+                <h1 className="text-4xl font-bold mb-6 text-center flex-1">
                     Public Profile Link
                 </h1>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex-1">
                         <FormField
                             control={form.control}
                             name="content"
@@ -115,7 +122,7 @@ export default function page({ params }: { params: { userName: string } }) {
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage className='text-red-600'/>
                                 </FormItem>
                             )}
                         />
@@ -126,24 +133,29 @@ export default function page({ params }: { params: { userName: string } }) {
                                     Please wait
                                 </Button>
                             ) : (
-                                <Button type="submit" disabled={isLoading || !messageContent} variant={"destructive"}>
+                                <Button type="submit" disabled={isLoading || !messageContent} variant={"destructive"} className={`disable:bg-slate-300 
+                                w-full md:w-auto bg-slate-100 text-white hover:text-black hover:cursor-pointer hover:bg-blue-300 bg-blue-400`}>
                                     Send It
                                 </Button>
                             )}
                         </div>
                     </form>
                 </Form>
-                <div className="space-y-2">
+            </div>
+            <div className='flex flex-wrap flex-col'>
+                <div className="space-y-2 flex-1">
                     <Button
                         onClick={fetchSuggestedMessages}
-                        className="my-4"
+                        className="w-full md:w-auto bg-slate-100 text-white hover:text-black hover:cursor-pointer hover:bg-blue-300 bg-blue-400"
                         disabled={isSuggestLoading}
                     >
                         Suggest Messages
                     </Button>
                     <p>Click on any message below to select it.</p>
                 </div>
-                <Card>
+            </div>
+            <div className='flex flex-wrap '>
+                <Card className='h-45 sm:h-64 lg:h-60 xl:h-66 flex-1 overflow-auto'>
                     <CardHeader>
                         <h3 className="text-xl font-semibold">Messages</h3>
                     </CardHeader>
@@ -165,14 +177,6 @@ export default function page({ params }: { params: { userName: string } }) {
                     </CardContent>
                 </Card>
             </div>
-
-            <div className="text-center">
-                <div className="mb-4">Get Your Message Board</div>
-                <Button>
-                    <Link href="/Sign-up">Create Your Account</Link>
-                </Button>
-
-            </div>
-        </>
+        </div>
     )
 }

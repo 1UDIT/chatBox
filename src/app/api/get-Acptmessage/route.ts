@@ -1,25 +1,28 @@
 import { User, getServerSession } from "next-auth";
-import { authOptions } from "../[auth]/[...nextauth]/options";
-import { NextResponse } from "next/server";
-import mongoose from "mongoose";
+import { NextResponse } from "next/server"; 
 import UserModel from "@/Model/User";
 import dbConnect from "@/lib/dbConfig/dbConfig";
+import { authOptions } from "../[auth]/[...nextauth]/route";
 
 export async function GET(request: Request) {
     await dbConnect();
     const session = await getServerSession(authOptions);
-    const user: User = session?.user;
-
-    if (!user || !session) {
+    if (!session?.user?.email) {
+        return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+    const dbUser = await UserModel.findOne({
+        email: session.user.email,
+    });
+    if (!dbUser) {
         return NextResponse.json(
             { message: "Not Login" },
             { status: 404 }
         )
     }
-    const userId = new mongoose.Types.ObjectId(user?._id);
-
+    const userId = dbUser._id;
     try {
         const dataServe = await UserModel.findById(userId);
+        // console.log("dataServe", dataServe)
 
         if (!dataServe) {
             return NextResponse.json(
@@ -41,15 +44,19 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
     await dbConnect();
     const session = await getServerSession(authOptions);
-    const user: User = session?.user;
-
-    if (!user || !session) {
+    if (!session?.user?.email) {
+        return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+    const dbUser = await UserModel.findOne({
+        email: session.user.email,
+    });
+    if (!dbUser) {
         return NextResponse.json(
             { message: "Not Login" },
             { status: 404 }
         )
     }
-    const userId = new mongoose.Types.ObjectId(user?._id);
+    const userId = dbUser._id;
     const { acceptMessages } = await request.json();
 
     try {

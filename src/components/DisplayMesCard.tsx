@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios, { AxiosError } from 'axios';
 import dayjs from 'dayjs';
-import { X } from 'lucide-react'; 
+import { X } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     AlertDialog,
@@ -15,9 +15,14 @@ import {
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from './ui/button';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from "sonner"
 import { ApiResponse } from '@/types/ApiResponse';
-import { Message } from '@/Model/User';
+
+interface Message {
+    _id: string;
+    content: string;
+    createdAt: string; // or Date
+}
 
 type MessageCardProps = {
     message: Message;
@@ -26,27 +31,22 @@ type MessageCardProps = {
 
 
 
-export default function DisplayMesCard({ message, onMessageDelete }: MessageCardProps) {
-    const { toast } = useToast();
+export default function DisplayMesCard({ message, onMessageDelete }: MessageCardProps) {  
 
     const handleDeleteConfirm = async () => {
+        // console.log(message._id, "message._id");
+
         try {
             const response = await axios.delete<ApiResponse>(
-                `/api/deleteMessage/${message._id}`
+                `/api/deleteMessage/${message._id}` // ✅ FIXED
             );
-            toast({
-                title: response.data.message,
-            });
-            onMessageDelete(message._id);
 
+            toast.info(  response.data.message );
+
+            onMessageDelete(message._id); // optimistic UI update
         } catch (error) {
             const axiosError = error as AxiosError<ApiResponse>;
-            toast({
-                title: 'Error',
-                description:
-                    axiosError.response?.data.message ?? 'Failed to delete message',
-                variant: 'destructive',
-            });
+            toast.error(  "Error");
         }
     };
     return (
