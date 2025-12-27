@@ -1,6 +1,9 @@
-import { Message } from "@/Model/User";
+interface Message {
+    _id: string;
+    content: string;
+    createdAt: string; // or Date
+}
 
- 
 
 export interface ApiResponse {
   success: boolean;
