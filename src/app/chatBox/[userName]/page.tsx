@@ -126,7 +126,7 @@ export default function page() {
                                 </FormItem>
                             )}
                         />
-                        <div className="flex justify-center">
+                        <div className="flex justify-center my-2">
                             {isLoading ? (
                                 <Button disabled>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -159,7 +159,7 @@ export default function page() {
                     <CardHeader>
                         <h3 className="text-xl font-semibold">Messages</h3>
                     </CardHeader>
-                    <CardContent className="flex flex-col space-y-4 ">
+                    <CardContent className="flex flex-col space-y-4 text-wrap">
                         {error ? (
                             <p className="text-red-500">{error.message}</p>
                         ) : (
@@ -167,7 +167,7 @@ export default function page() {
                                 <Button
                                     key={index}
                                     variant="outline"
-                                    className="mb-2 h-auto w-auto break-words text-wrap"
+                                    className="mb-2 h-auto w-full whitespace-normal break-words text-left"
                                     onClick={() => handleMessageClick(message)}
                                 >
                                     {message}

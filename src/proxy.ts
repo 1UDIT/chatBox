@@ -19,13 +19,13 @@ export async function proxy(request: NextRequest) {
       url.pathname.startsWith('/verify') ||
       url.pathname === '/')
   ) {
-    return NextResponse.redirect(new URL(`/dashBorad/${token.username}`, request.url));
+    return NextResponse.redirect(new URL(`/dashBoard/${token.username}`, request.url));
   }
 
-  if (!token && url.pathname.startsWith('/dashBorad') || !token && url.pathname.startsWith('/chatBox')) {
+  if (!token && url.pathname.startsWith('/dashBoard') || !token && url.pathname.startsWith('/chatBox')) {
     return NextResponse.redirect(new URL('/Sign-in', request.url));
   }
-  if (!token && url.pathname.startsWith('/dashBorad')) {
+  if (!token && url.pathname.startsWith('/dashBoard')) {
     return NextResponse.redirect(new URL('/Sign-in', request.url));
   }
 

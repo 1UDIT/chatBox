@@ -79,7 +79,7 @@ export default function DisplayMesCard({ message, onMessageDelete }: MessageCard
                         </AlertDialogContent>
                     </AlertDialog>
                 </div>
-                <div className="text-sm my-6">
+                <div className="text-sm text-slate-600">
                     {dayjs(message.createdAt).format('MMM D, YYYY h:mm A')}
                 </div>
             </CardHeader>

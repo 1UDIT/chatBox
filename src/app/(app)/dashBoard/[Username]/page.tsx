@@ -127,7 +127,7 @@ export default function page() {
     }, [setValue, fetchMessages, FetchAcceptMessage])
 
     return (
-        <main className="mx-auto my-8 px-6 bg-white rounded max-w-4xl flex-1">
+        <main className="mx-auto my-8 px-6 bg-white rounded w-full max-w-5xl flex-1">
             <div className='flex flex-wrap flex-col py-6'>
                 <span className="text-2xl font-bold">User Dashbord</span>
                 <div className="grid grid-rows-2 px-2 py-2">
