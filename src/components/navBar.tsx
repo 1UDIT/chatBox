@@ -27,7 +27,7 @@ function Navbar() {
         <a href="#" className="text-xl font-bold mb-4 md:mb-0">
           True Feedback
         </a>
-        <span>Welcome, {username}</span>
+        <span>{user?.name ? `Welcome, ${user.name}` : null}</span>
         {session && username ? (
           <div className="flex gap-3 items-center">
 
@@ -54,7 +54,7 @@ function Navbar() {
 
             <Button
               variant="outline"
-              onClick={() => signOut({ callbackUrl: '/Sign-in' })}
+              onClick={() => signOut({ callbackUrl: '/' })}
               className='w-full md:w-auto bg-slate-100 text-black hover:cursor-pointer  hover:bg-blue-300'
             >
               Logout

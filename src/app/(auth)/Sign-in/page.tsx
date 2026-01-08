@@ -53,7 +53,7 @@ export default function page() {
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-800">
-            <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
+            <div className="w-full max-w-md p-8 bg-white rounded-lg inset-shadow-2xs">
                 <div className="text-center">
                     <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
                         Welcome Back to True Feedback
@@ -84,7 +84,7 @@ export default function page() {
                                 </FormItem>
                             )}
                         />
-                        <Button className='w-full bg-blue-400 text-white hover:bg-blue-300 hover:text-black' type="submit">Sign In</Button>
+                        <Button className='w-full bg-blue-600 text-white hover:bg-blue-300 hover:text-black' type="submit">Sign In</Button>
                     </form>
                 </Form>
                 <div className="text-slate-600 flex justify-center py-2">Log in to your account</div>
