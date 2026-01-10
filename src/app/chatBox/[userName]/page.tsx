@@ -102,8 +102,8 @@ export default function page() {
     };
 
     return (
-        <div className="container mx-auto my-8 px-6 bg-white rounded max-w-4xl">
-            <div className='flex flex-wrap flex-col'>
+        <div className="mx-auto px-4 bg-white rounded w-full max-w-4xl flex-1">
+            <div className='flex flex-wrap flex-col '>
                 <h1 className="text-4xl font-bold mb-6 text-center flex-1">
                     Public Profile Link
                 </h1>
@@ -154,8 +154,8 @@ export default function page() {
                     <p>Click on any message below to select it.</p>
                 </div>
             </div>
-            <div className='flex flex-wrap '>
-                <Card className='h-45 sm:h-64 lg:h-60 xl:h-66 flex-1 overflow-auto'>
+            <div className='flex flex-wrap flex-col '>
+                <Card className='h-40 sm:h-64 lg:h-60 xl:h-66 overflow-auto'>
                     <CardHeader>
                         <h3 className="text-xl font-semibold">Messages</h3>
                     </CardHeader>

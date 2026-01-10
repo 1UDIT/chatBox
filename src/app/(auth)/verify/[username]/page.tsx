@@ -27,7 +27,7 @@ export default function VerifyAccount() {
 
   const onSubmit = async (data: z.infer<typeof verifySchema>) => {
     try {
-      const response = await axios.post<ApiResponse>(`/api/verify-code`, {
+      await axios.post<ApiResponse>(`/api/verify-code`, {
         username: params.username,
         code: data.code,
       });
@@ -46,29 +46,31 @@ export default function VerifyAccount() {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
-        <div className="text-center">
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
-            Verify Your Account
-          </h1>
-          <p className="mb-4">Enter the verification code sent to your email</p>
+      <div className="relative w-90 sm:w-full max-w-md p-[6px]  rounded-lg animated-border">
+        <div className="w-90  sm:w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+          <div className="text-center ">
+            <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
+              Verify Your Account
+            </h1>
+            <p className="mb-4">Enter the verification code sent to your email</p>
+          </div>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <FormField
+                name="code"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Verification Code</FormLabel>
+                    <Input {...field} />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className=''>Verify</Button>
+            </form>
+          </Form>
         </div>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              name="code"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Verification Code</FormLabel>
-                  <Input {...field} />
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Verify</Button>
-          </form>
-        </Form>
       </div>
     </div>
   );

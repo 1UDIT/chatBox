@@ -62,7 +62,9 @@ function Navbar() {
           </div>
         ) : (
           <Link href="/Sign-in">
-            <Button variant="outline">Login</Button>
+            <div className="relative   max-w-md p-[3px]  rounded-lg animated-border">
+              <Button variant="outline" className='w-20 bg-white text-black hover:bg-slate-100 hover:font-bold active:bg-red-100'>Login</Button>
+            </div>
           </Link>
         )}
       </div>

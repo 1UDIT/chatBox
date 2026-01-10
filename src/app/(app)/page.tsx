@@ -12,12 +12,7 @@ export default function Home() {
             True Feedback - Where your identity remains a secret.
           </p>
         </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="text-center p-4 md:p-6 bg-gray-900 text-white">
-        © 2023 True Demo. All rights reserved.
-      </footer>
+      </main> 
     </>
   );
 }
